@@ -1,19 +1,22 @@
 # I1 — Expose transient recording/job failures in session state
 
-Contribution group: I1. Evidence status: need SOURCE-VERIFIED from the snapshot; design only (not implemented).
+Contribution group: I1. Evidence status: SOURCE-VERIFIED from the snapshot; design only (not implemented).
 
 ## Problem (evidence in this snapshot)
 
 - `worker.py` `_recording`: both failure paths wrap the store update in
   `with suppress(StoreError): await store_call(self.store.set_recording, tenant, sid, "failed", eid)`
-  — the `RecordingError` reason (a fixed label such as "Egress failed; recording is not confirmed")
+  (lines 229 and 277) — the `RecordingError` reason (a fixed label such as "Egress failed; recording is not confirmed")
   is discarded at this boundary.
-- `store.py` `observe_recording`: on a failed health readback it flips
+- `store.py` `observe_recording` (line 897): on a failed health readback it flips
   `recording_status="failed"` and pauses the session. No reason is recorded anywhere in the
   session document.
-- `Operator.tsx` renders `statusLabel(session.status)` ("Review interrupted") and
-  `session.recording_status` ("failed") — with no cause. The only ways to learn why are direct
-  database queries (`beep_jobs.error`, `beep_jobs.result`) or reading worker logs.
+- `session.recording_status` is surfaced only in the participant view (`Review.tsx` lines 267
+  and 828–832: status without cause). `Operator.tsx` renders only `statusLabel(session.status)`
+  (lines 155 and 423) — after a recording failure the operator sees a generic "Paused" (or an
+  unqualified "AI-led review" if the status stayed `active`) with no hint that recording failed.
+  The only ways to learn why are direct database queries (`beep_jobs.error`, `beep_jobs.result`)
+  or reading worker logs.
 
 ## Current limitation
 
@@ -36,7 +39,8 @@ s["last_recording_failure"] = {
 ```
 
 Render in `Operator.tsx` (session ledger row + review header) as a small warning with the
-label; never render exception text or provider payloads (consistent with the pack's
+label — so the operator's list reflects a failed recording instead of a bare status label —
+and never render exception text or provider payloads (consistent with the pack's
 privacy discipline in `telemetry.SDKPrivacyFilter`).
 
 ## Implementation approach

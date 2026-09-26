@@ -4,7 +4,7 @@ Status: SOURCE-VERIFIED (complete static trace). All line numbers refer to the s
 
 ## Part A — The promise
 
-`submission/src/beep_agent/consent.py`, `consent_policy()`, the `notice` dict (lines 33–47):
+`submission/src/beep_agent/consent.py`, `consent_policy()`, the `notice` dict (lines 32–50):
 
 ```python
 withdrawal=("You may withdraw AI or recording permission separately. Withdrawal pauses the review. "
@@ -18,14 +18,14 @@ The notice distinguishes withdrawal from pause/finish: "Pause or finish stops ne
 ## Part B — No shipped UI path can withdraw
 
 1. **The only consent writer in the frontend is ConsentForm.** Exhaustive search of `web/src` for `mutate("consent"` and `onConsent`:
-   - `ConsentForm.tsx:96` — `onConsent({ ai: true, recording: true, ... })` — both flags hard-coded `true`.
-   - `Review.tsx:1096` — `<ConsentForm onConsent={(value) => mutate("consent", value)...}` — the only caller.
+   - `ConsentForm.tsx:96–98` — `onConsent({ ai: true, recording: true, ... })` — both flags hard-coded `true`.
+   - `Review.tsx:1095–1097` — `<ConsentForm onConsent={(value) => mutate("consent", value)...}` — the only caller.
    No other component posts to `/consent`.
 
 2. **The form's checkboxes cannot produce a reduced decision.** `ConsentForm.tsx`:
-   - lines 43–44: `const [ai, setAi] = useState(false); const [recording, setRecording] = useState(false);`
-   - line 175: submit button `disabled={!ai || !recording || disabled}` — the form only ever submits when BOTH are checked.
-   - lines 91–104: `onSubmit` requires `ai && recording` before calling `onConsent`.
+   - lines 33–34: `const [ai, setAi] = useState(false); const [recording, setRecording] = useState(false);`
+   - line 167: submit button `disabled={!ai || !recording || disabled}` — the form only ever submits when BOTH are checked.
+   - line 94: `onSubmit` requires `ai && recording` before calling `onConsent`.
 
 3. **The type forbids false.** `types.ts` lines 27–30:
    ```ts
@@ -47,7 +47,7 @@ Conclusion for Part B: the promised action ("You may withdraw AI or recording pe
 
 ## Part C — The backend withdrawal machinery is complete but unreachable
 
-1. `store.py` `set_consent` → `_consent_receipt_context` (lines ~396–412). When the new decision is a reduction of the previous one (`reducing_only`), it writes a receipt with:
+1. `store.py` `set_consent` → `_consent_receipt_context` (function spanning lines 377–416; the withdrawal branch sits at lines 396–412). When the new decision is a reduction of the previous one (`reducing_only`), it writes a receipt with:
    - `notice_binding="withdrawal_prior_notice"` and `policy=prior["policy"]` (the previous receipt's stored policy — which DID include the withdrawal sentence the participant saw), or
    - `notice_binding="withdrawal_notice_unavailable"` with `policy=None` when no prior policy exists.
 

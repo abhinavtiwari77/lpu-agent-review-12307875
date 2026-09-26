@@ -1,7 +1,7 @@
 # I2 — Consent-notice versioning and participant-visible receipts
 
 Contribution group: I2 (distinct from B1: B1 is the missing withdrawal flow; I2 is provenance
-visibility for the consent that DID happen). Evidence status: need SOURCE-VERIFIED; design
+visibility for the consent that DID happen). Evidence status: SOURCE-VERIFIED; design
 only (not implemented).
 
 ## Problem (evidence in this snapshot)
@@ -9,7 +9,7 @@ only (not implemented).
 - The backend already builds a rigorous consent provenance chain:
   `consent.py` stamps `notice_version`, `policy_id = content_hash(policy)`,
   `provider_configuration_hash`; `store._append_consent_receipt` writes immutable receipts
-  (DB trigger `beep_consent_receipts_immutable`) with `epoch_before`/`epoch_after`,
+  (DB trigger `beep_consent_receipts_immutable`, `store.py` lines 93–105) with `epoch_before`/`epoch_after`,
   `principal_kind`, `token_digest`, `notice_binding`, and the accepted `policy` JSON.
 - None of this reaches the participant:
   - `ConsentForm.tsx` shows the notice text but never which version/policy_id was accepted;
