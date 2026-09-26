@@ -1,0 +1,44 @@
+# --- Secrets & local credentials (never commit) ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+secrets*.json
+
+# --- Dependencies & virtual environments ---
+node_modules/
+.venv/
+venv/
+
+# --- Python caches & build output ---
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+dist/
+build/
+coverage/
+.coverage
+
+# --- JS/TS test & build artifacts ---
+*.tsbuildinfo
+playwright-report/
+test-results/
+.nyc_output/
+
+# --- Tool/workspace state ---
+.freebuff/
+
+# --- Editor & OS junk ---
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+.idea/
+.vscode/
