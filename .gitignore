@@ -29,6 +29,7 @@ coverage/
 *.tsbuildinfo
 playwright-report/
 test-results/
+web/review-fix-artifacts/
 .nyc_output/
 
 # --- Tool/workspace state ---
