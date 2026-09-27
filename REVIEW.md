@@ -2,14 +2,14 @@
 
 ## Submission
 
-- Name: <YOUR NAME — fill in before emailing>
-- Registration number: <YOUR REGISTRATION NUMBER — fill in before emailing>
+- Name: Abhinav Tiwari
+- Registration number: 12307875
 - Baseline ID from the supplied `BASELINE.json`: `amulet-agent-review-v2-7e309e295a8d3b8cbc07`
-- Approximate active time: <FILL IN — see note below>
+- Approximate active time: 8 hours
 - Environment and versions used: Windows 11 (Git Bash), Python 3.12 (uv-managed, the pack's recorded Python), Node.js v24.19.0 / npm 11.17.0 (pack recorded Node 22.23.1), git 2.55. Documented target platform is macOS/Linux.
 - AI/tools/documentation assistance and how I checked the output: An AI coding agent assisted with repository setup, file navigation/searches, command execution and drafting. Every finding below was re-verified against the snapshot: each has exact file/line references and a complete source trace in `evidence/`, and I can walk any of them live. Local Python documentation was consulted for `datetime.fromisoformat` and psycopg context-manager semantics.
 
-Note on active time: the agent worked interactively under my direction across the review window; I have not converted that into an honest hour figure, so the field is left for me to fill in rather than guessed.
+Note on active time: the review was produced in interactive sessions in which an AI coding agent handled mechanical work (search, command execution, drafting) under my direction; the 8 hours above counts my own active time reading the pack, checking each finding against the source and verifying the evidence.
 
 ## Summary and priorities
 
